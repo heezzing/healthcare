@@ -16,6 +16,7 @@ def organize_files(base_path):
     os.makedirs(true_dir, exist_ok=True)
     os.makedirs(false_dir, exist_ok=True)
 
+
     # 라벨 파일 이름 추출 (확장자 제외)
     label_files = {os.path.splitext(file)[0] for file in os.listdir(label_dir) if file.endswith('.txt')}
 
