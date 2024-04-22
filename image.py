@@ -10,11 +10,13 @@ def organize_files(base_path):
     
     true_file = 0
     false_file = 0
-
+  
 
     # true와 false 폴더가 없다면 생성
     os.makedirs(true_dir, exist_ok=True)
     os.makedirs(false_dir, exist_ok=True)
+
+
 
 
     # 라벨 파일 이름 추출 (확장자 제외)
