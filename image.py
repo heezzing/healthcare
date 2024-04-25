@@ -1,5 +1,6 @@
 import os
 import shutil
+import json
 
 
 class FileOrganizer:
@@ -11,6 +12,7 @@ class FileOrganizer:
         self.false_dir = os.path.join(base_path, 'false')  # 일치하지 않는 파일 폴더 경로
         self.true_file = 0
         self.false_file = 0
+        self.data = {}
 
         # true와 false 폴더 생성
         os.makedirs(self.true_dir, exist_ok=True)
@@ -33,7 +35,7 @@ class FileOrganizer:
 
     def average_confidence(self):
         directory = self.label_dir
-        output_file = os.path.join(self.base_path, 'average_confidence.txt')
+        output_file = os.path.join(self.base_path, 'average_confidence.json')
         if os.path.exists(output_file):
             print("Output file already exists. No further action taken.")
             return
@@ -52,13 +54,17 @@ class FileOrganizer:
                             total_confidence += confidence
                             count += 1
 
-        with open(output_file, 'w') as file:
-            if count > 0:
-                average_confidence = total_confidence / count
-                file.write(f"Average Confidence: {average_confidence:.3f}\n")
-            else:
-                file.write("No detections found.\n")
+        
+        if count > 0:
+            average_confidence = total_confidence / count
+            self.data["Average Confidence"] = average_confidence        
+        else:
+            file.write("No detections found.\n")
 
-            file.write(f"Total Files Count: {self.true_file + self.false_file}\n")
-            file.write(f"True Files Count: {self.true_file}\n")
-            file.write(f"False Files Count: {self.false_file}\n")
+        self.data["Total Files Count"] = self.true_file + self.false_file
+        self.data["True Files Coun"] = self.true_file
+        self.data["False Files Count"] = self.false_file
+
+        with open(output_file, 'w',encoding='utf-8') as file:
+            json.dump(self.data, file, indent=4)
+
